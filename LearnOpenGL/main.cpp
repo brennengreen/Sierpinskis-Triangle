@@ -11,16 +11,11 @@ const char *vertexShaderSource = "#version 330 core\n"
 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "}\0";
 const char *fragmentShader1Source = "#version 330 core\n"
-"out vec4 FragColor;"
+"out vec4 FragColor;\n"
+"uniform vec4 ourColor;\n"
 "void main()\n"
 "{\n"
-"    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);"
-"}\0";
-const char *fragmentShader2Source = "#version 330 core\n"
-"out vec4 FragColor;"
-"void main()\n"
-"{\n"
-"    FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);"
+"    FragColor = ourColor;"
 "}\0";
 
 int main()
@@ -75,18 +70,6 @@ int main()
 		std::cout << "ERROR::SHADER::FRAGMENT1::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
-	// Fragment Shader 2
-	unsigned int fragmentShader2;
-	fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader2, 1, &fragmentShader2Source, NULL);
-	glCompileShader(fragmentShader2);
-	glGetShaderiv(fragmentShader2, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader2, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT2::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
 	// Shader Program 1
 	unsigned int shaderProgram1;
 	shaderProgram1 = glCreateProgram();
@@ -99,21 +82,9 @@ int main()
 		std::cout << "ERROR::SHADER1::LINKER::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
-	unsigned int shaderProgram2;
-	shaderProgram2 = glCreateProgram();
-	glAttachShader(shaderProgram2, vertexShader);
-	glAttachShader(shaderProgram2, fragmentShader2);
-	glLinkProgram(shaderProgram2);
-	glGetProgramiv(shaderProgram1, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgram2, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER2::LINKER::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
 	// Delete leftover shaders
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader1);
-	glDeleteShader(fragmentShader2);
 
 
 
@@ -171,8 +142,16 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 
-		// FIRST TRIANGLE
 		glUseProgram(shaderProgram1);
+
+
+		float timeValue = glfwGetTime();
+		//float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX)
+		float cValue = (sin(timeValue) / 2.0f) + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(shaderProgram1, "ourColor");
+		glUniform4f(vertexColorLocation, 0.0f, cValue, 0.0f, 1.0f);
+
+		// FIRST TRIANGLE
 		glBindVertexArray(VAOs[0]);
 		glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -180,7 +159,6 @@ int main()
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		// SECOND TRIANGLE
-		glUseProgram(shaderProgram2);
 		glBindVertexArray(VAOs[1]);
 		glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
