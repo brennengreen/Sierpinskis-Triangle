@@ -2,8 +2,20 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+struct ColorVec3 {
+	float r;
+	float g;
+	float b;
+	ColorVec3(float r0, float g0, float b0) {
+		r = r0;
+		g = g0;
+		b = b0;
+	}
+};
+
 void framebuffer_size_callback(GLFWwindow * window, int width, int height);
 void processInput(GLFWwindow * window);
+ColorVec3 getHSVColor(float h, float s, float v);
 const char *vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
 "void main()\n"
@@ -128,8 +140,8 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	// uncomment this call to draw in wireframe polygons.
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//uncomment this call to draw in wireframe polygons.
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// render loop
 	// -----------
@@ -143,13 +155,19 @@ int main()
 
 
 		glUseProgram(shaderProgram1);
+		int vertexColorLocation = glGetUniformLocation(shaderProgram1, "ourColor");
 
 
 		float timeValue = glfwGetTime();
 		//float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX)
 		float cValue = (sin(timeValue) / 2.0f) + 0.5f;
-		int vertexColorLocation = glGetUniformLocation(shaderProgram1, "ourColor");
-		glUniform4f(vertexColorLocation, 0.0f, cValue, 0.0f, 1.0f);
+		float hValue = 360 * cValue;
+		ColorVec3 colorVec = getHSVColor(hValue, 1.0f, 1.0f);
+		float r, g, b;
+		r = colorVec.r; g = colorVec.g; b = colorVec.b;
+		glUniform4f(vertexColorLocation, r, g, b, 1.0f);
+
+
 
 		// FIRST TRIANGLE
 		glBindVertexArray(VAOs[0]);
@@ -182,6 +200,32 @@ int main()
 
 	glfwTerminate();
 	return 0;
+}
+
+ColorVec3 getHSVColor(float h, float s, float v) {
+	// h [0, 360] s/v [0.0. 1.0];
+	int i = (int)floor(h / 60.0f) % 6;
+	float f = h / 60.0f - floor(h / 60.0f);
+	float p = v * (float)(1 - s);
+	float q = v * (float)(1 - s * f);
+	float t = v * (float)(1 - (1 - f) * s);
+	ColorVec3 color(0.0f, 0.0f, 0.0f);
+	switch (i) {
+		case 0: color = ColorVec3(v, t, p);
+			break;
+		case 1: color = ColorVec3(q, v, p);
+			break;
+		case 2: color = ColorVec3(p, v, t);
+			break;
+		case 3: color = ColorVec3(p, q, v);
+			break;
+		case 4: color = ColorVec3(t, p, v);
+			break;
+		case 5: color = ColorVec3(v, p, q);
+			break;
+		default: color = ColorVec3(0.f, 0.f, 0.f);
+	}
+	return color;
 }
 
 void framebuffer_size_callback(GLFWwindow * window, int width, int height)
