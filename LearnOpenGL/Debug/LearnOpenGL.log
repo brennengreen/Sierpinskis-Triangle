@@ -1,2 +1,4 @@
 ﻿  main.cpp
+f:\projects\learnopengl\learnopengl\main.cpp(245): warning C4305: '+=': truncation from 'double' to 'float'
+f:\projects\learnopengl\learnopengl\main.cpp(247): warning C4305: '-=': truncation from 'double' to 'float'
   LearnOpenGL.vcxproj -> F:\Projects\LearnOpenGL\Debug\LearnOpenGL.exe
