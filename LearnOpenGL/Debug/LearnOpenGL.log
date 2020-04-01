@@ -1,4 +1,3 @@
-﻿  main.cpp
-f:\projects\learnopengl\learnopengl\main.cpp(331): warning C4305: '+=': truncation from 'double' to 'float'
-f:\projects\learnopengl\learnopengl\main.cpp(333): warning C4305: '-=': truncation from 'double' to 'float'
-  LearnOpenGL.vcxproj -> F:\Projects\LearnOpenGL\Debug\LearnOpenGL.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (LearnOpenGL.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  main.cpp
+  LearnOpenGL.vcxproj -> F:\Projects\LearnOpenGL - Copy\Debug\Sierpinski.exe
