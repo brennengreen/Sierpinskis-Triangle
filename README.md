@@ -14,4 +14,4 @@ Sierpinski( A, B, C, N ):
 	    Sierpinski(C, mid(A, C), mid(B, C), N - 1)
 ```
 The actual program adds some nice RGB and spinning effects which is cool, but for functional results our triangle of depth 5 looks like this:
-![Triangles](Triangle.jpg)
+![Triangles](Triangle.JPG)
