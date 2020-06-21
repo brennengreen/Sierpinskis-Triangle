@@ -1,4 +1,4 @@
-# Sierpinki's Triangle (OpenGL)
+# Sierpinski's Triangle (OpenGL)
 
 This project was a learning experience, my goal was to recreate the ever so famous Sierpinski Triangle using OpenGL's Core Profile.
 
